@@ -4,7 +4,7 @@
              StartupUri="Views/PostBootWindow.xaml">
 
     <Application.Resources>
-        <!-- ГЛОБАЛЬНЫЙ СТИЛЬ ДЛЯ ВСЕХ ОКОН -->    
+        <!-- ГЛОБАЛЬНЫЙ СТИЛЬ ДЛЯ ВСЕХ ОКОН -->
         <Style TargetType="Window">
             <Setter Property="WindowState" Value="Maximized"/>
             <Setter Property="WindowStyle" Value="None"/>

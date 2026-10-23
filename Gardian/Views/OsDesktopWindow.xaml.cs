@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Media;
 using System.Windows.Threading;
 using Gardian.Apps;
@@ -14,34 +15,32 @@ namespace Gardian.Views
     public partial class OsDesktopWindow : Window
     {
         private readonly DispatcherTimer _clockTimer;
-        private DosTerminalWindow _parentTerminal;
         private readonly List<MockWindow> _openWindows = new();
-        
+
         public OsDesktopWindow()
         {
             InitializeComponent();
-            // 1. Подписываемся на изменения настроек (чтобы рабочий стол обновлялся, 
-            // если пользователь открыл настройки, не закрывая рабочий стол)
+
+            // 1. Подписываемся на изменения настроек (ОДИН РАЗ)
             SettingsManager.SettingsChanged += OnSettingsChanged;
 
             // 2. Сразу применяем текущие настройки из памяти
             ApplyShaderSettings();
+            ApplyThemeToDesktop();
 
-            // ... остальной код конструктора (таймеры и т.д.) ...
+            // 3. Таймер часов
             _clockTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1) };
             _clockTimer.Tick += (s, e) => ClockText.Text = DateTime.Now.ToString("HH:mm");
             _clockTimer.Start();
-
-            SettingsManager.SettingsChanged += OnSettingsChanged;
-
         }
+
+        // === ОБРАБОТКА ИЗМЕНЕНИЙ НАСТРОЕК ===
         private void OnSettingsChanged()
         {
             ApplyShaderSettings();
             ApplyThemeToDesktop();
         }
 
-        // Этот метод берет значения из SettingsManager и передает их шейдеру
         private void ApplyShaderSettings()
         {
             if (CrtEffect == null) return;
@@ -64,40 +63,6 @@ namespace Gardian.Views
             CrtEffect.LineWidth = SettingsManager.LineWidth;
         }
 
-        // Не забудь отписаться при закрытии окна, чтобы не было утечек памяти
-        protected override void OnClosed(EventArgs e)
-        {
-            SettingsManager.SettingsChanged -= OnSettingsChanged;
-            base.OnClosed(e);
-        }
-        private void Icon_Skype_Click(object sender, RoutedEventArgs e)
-        {
-            var skypeWindow = new MockWindow
-            {
-                Title = "Skype™",
-                Width = 600,
-                Height = 450
-            };
-
-            var skypeApp = new SkypeApp();
-
-            // ← КЛЮЧЕВОЙ МОМЕНТ: Передаем текущего пользователя
-            string currentUser = "admin_user"; // В будущем бери из SettingsManager или AuthManager
-            var viewModel = new SkypeViewModel(currentUser);
-
-            skypeApp.Initialize(viewModel);
-
-            skypeWindow.WindowContent.Content = skypeApp;
-
-            Canvas.SetLeft(skypeWindow, 150);
-            Canvas.SetTop(skypeWindow, 100);
-            Canvas.SetZIndex(skypeWindow, 100);
-
-            DesktopCanvas.Children.Add(skypeWindow);
-        }
-
-        private void OnSettingsChanged() => ApplyThemeToDesktop();
-
         private void ApplyThemeToDesktop()
         {
             var bgColor = SettingsManager.CurrentTheme == SettingsManager.ThemeType.Win98
@@ -105,6 +70,9 @@ namespace Gardian.Views
                 : SettingsManager.GetDesktopBackgroundColor();
 
             RootGrid.Background = new SolidColorBrush(bgColor);
+
+            // Панель задач просто меняет цвет, без рамок
+            Taskbar.Background = new SolidColorBrush(SettingsManager.GetControlFaceColor());
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -117,51 +85,58 @@ namespace Gardian.Views
                 this.Close();
                 return;
             }
-
-            // Остальной код загрузки...
-            //ApplyShaderSettings();
-            ApplyThemeToDesktop();
         }
 
-        // === СОЗДАНИЕ ВИРТУАЛЬНЫХ ОКОН ===
-        private void Icon_TestWindow_Click(object sender, RoutedEventArgs e)
+        private void Window_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
-            OpenMockWindow("Test Window", CreateTestContent());
+            if (Gardian.Utils.KeyboardHandler.HandleHotkeys(e.Key))
+            {
+                e.Handled = true;
+                SettingsManager.Apply();
+            }
         }
+
+        // === УПРАВЛЕНИЕ ОКНАМИ ===
+        private void Icon_TestWindow_Click(object sender, RoutedEventArgs e) => OpenMockWindow("Test Window", CreateTestContent());
+        private void Icon_About_Click(object sender, RoutedEventArgs e) => OpenMockWindow("About GARDIAN OS", CreateAboutContent());
 
         private void Icon_Settings_Click(object sender, RoutedEventArgs e)
         {
-            // Settings всё ещё открываем как отдельное окно, потому что оно модальное
             var settings = new SettingsWindow { Owner = this };
             settings.ShowDialog();
         }
 
-        private void Icon_About_Click(object sender, RoutedEventArgs e)
+        private void Icon_Skype_Click(object sender, RoutedEventArgs e)
         {
-            OpenMockWindow("About GARDIAN OS", CreateAboutContent());
+            var skypeWindow = new MockWindow { Title = "Skype™", Width = 600, Height = 450 };
+            var skypeApp = new SkypeApp();
+
+            // ✨ БЕРЕМ ИМЯ ИЗ МЕНЕДЖЕРА СЕССИИ, а не хардкодим
+            string currentUser = UserSessionManager.CurrentUser?.Username ?? "unknown";
+            var viewModel = new SkypeViewModel(currentUser);
+            skypeApp.Initialize(viewModel);
+
+            skypeWindow.WindowContent.Content = skypeApp;
+            Canvas.SetLeft(skypeWindow, 150);
+            Canvas.SetTop(skypeWindow, 100);
+            Canvas.SetZIndex(skypeWindow, 100);
+
+            DesktopCanvas.Children.Add(skypeWindow);
         }
-        
+
         private void OpenMockWindow(string title, UIElement content)
         {
-            var mockWindow = new MockWindow
-            {
-                Title = title,
-                Width = 400,
-                Height = 300
-            };
-
+            var mockWindow = new MockWindow { Title = title, Width = 400, Height = 300 };
             mockWindow.WindowContent.Content = content;
             mockWindow.CloseRequested += MockWindow_CloseRequested;
             mockWindow.MinimizeRequested += MockWindow_MinimizeRequested;
 
-            // Позиционируем окно
             Canvas.SetLeft(mockWindow, 100 + _openWindows.Count * 30);
             Canvas.SetTop(mockWindow, 100 + _openWindows.Count * 30);
             Canvas.SetZIndex(mockWindow, _openWindows.Count + 1);
 
             DesktopCanvas.Children.Add(mockWindow);
             _openWindows.Add(mockWindow);
-
             UpdateTaskbarButtons();
         }
 
@@ -174,16 +149,11 @@ namespace Gardian.Views
             }
         }
 
-        private void MockWindow_MinimizeRequested(object sender, RoutedEventArgs e)
-        {
-            UpdateTaskbarButtons();
-        }
+        private void MockWindow_MinimizeRequested(object sender, RoutedEventArgs e) => UpdateTaskbarButtons();
 
-        // === ОБНОВЛЕНИЕ ПАНЕЛИ ЗАДАЧ ===
         private void UpdateTaskbarButtons()
         {
             TaskbarButtons.Children.Clear();
-
             foreach (var window in _openWindows)
             {
                 var btn = new Button
@@ -196,26 +166,16 @@ namespace Gardian.Views
                     FontSize = 11,
                     Tag = window
                 };
-
                 btn.Click += (s, e) =>
                 {
                     var targetWindow = (MockWindow)((Button)s).Tag;
-                    if (targetWindow.Visibility == Visibility.Collapsed)
-                    {
-                        targetWindow.Visibility = Visibility.Visible;
-                        targetWindow.BringToFront();
-                    }
-                    else
-                    {
-                        targetWindow.BringToFront();
-                    }
+                    targetWindow.Visibility = Visibility.Visible;
+                    targetWindow.BringToFront();
                 };
-
                 TaskbarButtons.Children.Add(btn);
             }
         }
 
-        // === КОНТЕНТ ОКОН ===
         private UIElement CreateTestContent()
         {
             var stack = new StackPanel { Margin = new Thickness(10) };
@@ -235,18 +195,14 @@ namespace Gardian.Views
             return stack;
         }
 
-        // === ПАНЕЛЬ ЗАДАЧ ===
-        private void Btn_Start_Click(object sender, RoutedEventArgs e)
-        {
-            MessageBox.Show(this, "Start Menu (Coming Soon)", "GARDIAN", MessageBoxButton.OK, MessageBoxImage.Information);
-        }
-
+        private void Btn_Start_Click(object sender, RoutedEventArgs e) => MessageBox.Show(this, "Start Menu (Coming Soon)", "GARDIAN", MessageBoxButton.OK, MessageBoxImage.Information);
         private void Btn_Settings_Click(object sender, RoutedEventArgs e)
         {
             var settings = new SettingsWindow { Owner = this };
             settings.ShowDialog();
         }
 
+        // === ОЧИСТКА ПАМЯТИ (ОДИН РАЗ) ===
         protected override void OnClosed(EventArgs e)
         {
             SettingsManager.SettingsChanged -= OnSettingsChanged;
