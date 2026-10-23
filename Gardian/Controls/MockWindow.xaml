@@ -1,0 +1,110 @@
+﻿<UserControl x:Class="Gardian.Controls.MockWindow"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Width="400" Height="300"
+             Focusable="True"
+             TextOptions.TextFormattingMode="Display"
+             TextOptions.TextRenderingMode="Aliased"
+             RenderOptions.BitmapScalingMode="NearestNeighbor"
+             FontFamily="Tahoma, 'MS Sans Serif', sans-serif"
+             FontSize="11">
+
+    <Border x:Name="WindowBorder" 
+            BorderThickness="3"
+            Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"
+            BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}"
+            MouseLeftButtonDown="Border_MouseLeftButtonDown">
+
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="25"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <!-- Заголовок окна -->
+            <Grid Grid.Row="0" 
+                  Background="{DynamicResource {x:Static SystemColors.ActiveCaptionBrushKey}}"
+                  x:Name="TitleBar"
+                  MouseLeftButtonDown="TitleBar_MouseLeftButtonDown"
+                  MouseLeftButtonUp="TitleBar_MouseLeftButtonUp">
+
+                <DockPanel Margin="5,0">
+                    <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
+                        <Button x:Name="BtnMinimize" Content="—" Width="20" Height="20" Margin="0,0,2,0" Click="BtnMinimize_Click"/>
+                        <Button x:Name="BtnMaximize" Content="□" Width="20" Height="20" Margin="0,0,2,0" Click="BtnMaximize_Click"/>
+                        <Button x:Name="BtnClose" Content="X" Width="20" Height="20" Click="BtnClose_Click"/>
+                    </StackPanel>
+
+                    <TextBlock Text="{Binding Title, RelativeSource={RelativeSource AncestorType=UserControl}}" 
+                               Foreground="{DynamicResource {x:Static SystemColors.ActiveCaptionTextBrushKey}}"
+                               FontWeight="Bold" 
+                               VerticalAlignment="Center"/>
+                </DockPanel>
+            </Grid>
+
+            <!-- Контент окна -->
+            <ContentPresenter Grid.Row="1" x:Name="WindowContent" Margin="5"/>
+
+            <!-- ✨ НОВОЕ: Слой с ручками изменения размера (поверх всего) -->
+            <Grid Grid.RowSpan="2" IsHitTestVisible="True">
+                <!-- Углы -->
+                <Border Name="ResizeTopLeft" Width="10" Height="10" 
+                        HorizontalAlignment="Left" VerticalAlignment="Top" 
+                        Cursor="SizeNWSE" Background="Transparent"
+                        MouseLeftButtonDown="Resize_MouseLeftButtonDown"
+                        MouseLeftButtonUp="Resize_MouseLeftButtonUp"
+                        MouseMove="Resize_MouseMove"/>
+
+                <Border Name="ResizeTopRight" Width="10" Height="10" 
+                        HorizontalAlignment="Right" VerticalAlignment="Top" 
+                        Cursor="SizeNESW" Background="Transparent"
+                        MouseLeftButtonDown="Resize_MouseLeftButtonDown"
+                        MouseLeftButtonUp="Resize_MouseLeftButtonUp"
+                        MouseMove="Resize_MouseMove"/>
+
+                <Border Name="ResizeBottomLeft" Width="10" Height="10" 
+                        HorizontalAlignment="Left" VerticalAlignment="Bottom" 
+                        Cursor="SizeNESW" Background="Transparent"
+                        MouseLeftButtonDown="Resize_MouseLeftButtonDown"
+                        MouseLeftButtonUp="Resize_MouseLeftButtonUp"
+                        MouseMove="Resize_MouseMove"/>
+
+                <Border Name="ResizeBottomRight" Width="10" Height="10" 
+                        HorizontalAlignment="Right" VerticalAlignment="Bottom" 
+                        Cursor="SizeNWSE" Background="Transparent"
+                        MouseLeftButtonDown="Resize_MouseLeftButtonDown"
+                        MouseLeftButtonUp="Resize_MouseLeftButtonUp"
+                        MouseMove="Resize_MouseMove"/>
+
+                <!-- Стороны -->
+                <Border Name="ResizeTop" Height="5" 
+                        VerticalAlignment="Top" Margin="10,0,10,0"
+                        Cursor="SizeNS" Background="Transparent"
+                        MouseLeftButtonDown="Resize_MouseLeftButtonDown"
+                        MouseLeftButtonUp="Resize_MouseLeftButtonUp"
+                        MouseMove="Resize_MouseMove"/>
+
+                <Border Name="ResizeBottom" Height="5" 
+                        VerticalAlignment="Bottom" Margin="10,0,10,0"
+                        Cursor="SizeNS" Background="Transparent"
+                        MouseLeftButtonDown="Resize_MouseLeftButtonDown"
+                        MouseLeftButtonUp="Resize_MouseLeftButtonUp"
+                        MouseMove="Resize_MouseMove"/>
+
+                <Border Name="ResizeLeft" Width="5" 
+                        HorizontalAlignment="Left" Margin="0,10,0,10"
+                        Cursor="SizeWE" Background="Transparent"
+                        MouseLeftButtonDown="Resize_MouseLeftButtonDown"
+                        MouseLeftButtonUp="Resize_MouseLeftButtonUp"
+                        MouseMove="Resize_MouseMove"/>
+
+                <Border Name="ResizeRight" Width="5" 
+                        HorizontalAlignment="Right" Margin="0,10,0,10"
+                        Cursor="SizeWE" Background="Transparent"
+                        MouseLeftButtonDown="Resize_MouseLeftButtonDown"
+                        MouseLeftButtonUp="Resize_MouseLeftButtonUp"
+                        MouseMove="Resize_MouseMove"/>
+            </Grid>
+        </Grid>
+    </Border>
+</UserControl>

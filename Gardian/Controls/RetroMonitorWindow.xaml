@@ -1,0 +1,83 @@
+﻿<Window x:Class="Gardian.Controls.RetroMonitorWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Retro Terminal" Height="700" Width="850"
+        Background="#222222" WindowStartupLocation="CenterScreen">
+
+    <Viewbox Stretch="Uniform">
+        <Grid Width="800" Height="600">
+
+            <!-- 1. Outer Shadow -->
+            <Border CornerRadius="35" Background="#1A1A1A" Margin="-5"/>
+
+            <!-- 2. Main Plastic Chassis -->
+            <!-- ✅ ИСПРАВЛЕНО: Убрано несуществующее BasicCornerRadius -->
+            <Border x:Name="MonitorChassis" CornerRadius="30" BorderThickness="12">
+                <Border.Background>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                        <GradientStop Color="#DED9CE" Offset="0.0"/>
+                        <GradientStop Color="#C6C0B2" Offset="1.0"/>
+                    </LinearGradientBrush>
+                </Border.Background>
+                <Border.BorderBrush>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="#EFEAE0" Offset="0.0"/>
+                        <GradientStop Color="#A39D91" Offset="1.0"/>
+                    </LinearGradientBrush>
+                </Border.BorderBrush>
+
+                <Grid>
+                    <!-- 3. Inner Dark Screen Bezel -->
+                    <Border CornerRadius="25" Margin="25,25,25,55" Background="#151515" BorderThickness="4">
+                        <Border.BorderBrush>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                <GradientStop Color="#8F8A7E" Offset="0.0"/>
+                                <GradientStop Color="#FFFFFF" Offset="1.0"/>
+                            </LinearGradientBrush>
+                        </Border.BorderBrush>
+
+                        <!-- 4. CRT Glass Screen -->
+                        <Border x:Name="CRTScreen" CornerRadius="45" Margin="8" Background="#0C140E">
+                            <Grid ClipToBounds="True">
+                                <!-- YOUR APP CONTENT -->
+                                <Grid Margin="10">
+                                    <TextBlock Text="C:\> _" Foreground="#00FF33" FontSize="28" 
+                                               FontFamily="Consolas" Margin="20"/>
+                                </Grid>
+
+                                <!-- 5. CRT Glass Curvature Glare -->
+                                <Path Data="M 0,0 Q 400,120 800,0 L 800,300 Q 400,400 0,300 Z" 
+                                      IsHitTestVisible="False" Opacity="0.04">
+                                    <Path.Fill>
+                                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                            <GradientStop Color="White" Offset="0"/>
+                                            <GradientStop Color="Transparent" Offset="1"/>
+                                        </LinearGradientBrush>
+                                    </Path.Fill>
+                                </Path>
+                            </Grid>
+                        </Border>
+                    </Border>
+
+                    <!-- 6. Bottom Control Panel -->
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" 
+                                VerticalAlignment="Bottom" Margin="0,0,45,15">
+                        <Ellipse Width="10" Height="10" Fill="#00FF22" Margin="0,0,10,0">
+                            <Ellipse.Effect>
+                                <DropShadowEffect Color="#00FF22" BlurRadius="8" ShadowDepth="0"/>
+                            </Ellipse.Effect>
+                        </Ellipse>
+                        <Border Width="24" Height="14" Background="#A39D91" CornerRadius="2" 
+                                BorderBrush="#6B665C" BorderThickness="2"/>
+                    </StackPanel>
+
+                    <!-- Brand Text -->
+                    <TextBlock Text="MONO-CHROME CRT-80" HorizontalAlignment="Left" 
+                               VerticalAlignment="Bottom" Margin="55,0,0,15" 
+                               Foreground="#7A7468" FontFamily="Arial" FontSize="11" 
+                               FontWeight="Bold"/>
+                </Grid>
+            </Border>
+        </Grid>
+    </Viewbox>
+</Window>

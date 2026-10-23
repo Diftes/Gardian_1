@@ -1,0 +1,414 @@
+﻿<Window x:Class="Gardian.Views.SettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="clr-namespace:Gardian.Controls"
+        Title="SYSTEM CONFIGURATION" 
+        WindowState="Maximized" 
+        WindowStyle="None" 
+        ResizeMode="NoResize" 
+        Topmost="True"
+        Background="#0A0A0A"
+        PreviewKeyDown="Window_PreviewKeyDown" Width="1920" Height="1080">
+
+
+    <Grid Margin="50">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1.2*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="2*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!-- ========================================== -->
+        <!-- ВЕРХНЯЯ ЧАСТЬ: 3 КОЛОНКИ -->
+        <!-- ========================================== -->
+        <Grid Grid.Row="0" ShowGridLines="False">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="1.5*" />
+                <ColumnDefinition Width="1*" />
+            </Grid.ColumnDefinitions>
+
+            <!-- 1. ЛЕВАЯ КОЛОНКА: ПЕРЕКЛЮЧАТЕЛИ (F1-F9) -->
+            <Border Grid.Column="0" BorderBrush="#FFD700" BorderThickness="2" CornerRadius="8" Padding="15" Margin="0,0,10,0">
+                <StackPanel>
+                    <TextBlock Text="[ QUICK TOGGLES ]" Foreground="#FFD700" FontSize="24" FontWeight="Regular" Margin="0,0,0,25" 
+                   FontFamily="/Gardian;component/Assets/DOS.ttf#PerfectDOSVGA437" HorizontalAlignment="Center"/>
+
+                    <CheckBox x:Name="ChkScanlines" Content="Scanlines (F1)" Foreground="#CCCCCC" FontSize="14" FontFamily="Consolas" Margin="0,8" Checked="ToggleSetting" Unchecked="ToggleSetting" Height="16"/>
+                    <CheckBox x:Name="ChkScanlineDark" Content="Scanline Dark (F2)" Foreground="#CCCCCC" FontSize="14" FontFamily="Consolas" Margin="0,8" Checked="ToggleSetting" Unchecked="ToggleSetting" Height="16"/>
+                    <CheckBox x:Name="ChkDistortion" Content="Screen Curvature (F3)" Foreground="#CCCCCC" FontSize="14" FontFamily="Consolas" Margin="0,8" Checked="ToggleSetting" Unchecked="ToggleSetting" Height="16"/>
+                    <CheckBox x:Name="ChkPhosphorGlow" Content="Phosphor Glow (F4)" Foreground="#CCCCCC" FontSize="14" FontFamily="Consolas" Margin="0,8" Checked="ToggleSetting" Unchecked="ToggleSetting" Height="16"/>
+                    <CheckBox x:Name="ChkNoise" Content="Noise (F5)" Foreground="#CCCCCC" FontSize="14" FontFamily="Consolas" Margin="0,8" Checked="ToggleSetting" Unchecked="ToggleSetting" Height="16"/>
+                    <CheckBox x:Name="ChkBrightness" Content="Brightness (F6)" Foreground="#CCCCCC" FontSize="14" FontFamily="Consolas" Margin="0,8" Checked="ToggleSetting" Unchecked="ToggleSetting" Height="16"/>
+                    <CheckBox x:Name="ChkBlur" Content="Blur (F7)" Foreground="#CCCCCC" FontSize="14" FontFamily="Consolas" Margin="0,8" Checked="ToggleSetting" Unchecked="ToggleSetting" HorizontalAlignment="Left" Height="16"/>
+                    <CheckBox x:Name="ChkGlitchSpeed" Content="Glitch Speed (F8)" Foreground="#CCCCCC" FontSize="14" FontFamily="Consolas" Margin="0,8" Checked="ToggleSetting" Unchecked="ToggleSetting" Height="16"/>
+                    <CheckBox x:Name="ChkGlitchWidth" Content="Glitch Width (F9)" Foreground="#CCCCCC" FontSize="14" FontFamily="Consolas" Margin="0,8" Checked="ToggleSetting" Unchecked="ToggleSetting" Height="16"/>
+
+                    <TextBlock Text="Press F1-F9 to toggle instantly." Foreground="#555555" FontSize="14" FontFamily="Consolas" Margin="0,20,0,0" FontStyle="Italic"/>
+                </StackPanel>
+            </Border>
+
+            <!-- 2. ЦЕНТРАЛЬНАЯ КОЛОНКА: РАСШИРЕННЫЕ НАСТРОЙКИ -->
+            <Border Grid.Column="1" BorderBrush="#FFD700" BorderThickness="2" CornerRadius="8" Padding="15" Margin="10,0,10,0">
+                <StackPanel Grid.Column="1" Margin="0,0,0,-6">
+                    <TextBlock Text="[ ADVANCED CRT TWEAKS ]" FontFamily="/Gardian;component/Assets/DOS.ttf#PerfectDOSVGA437" Foreground="#FFD700" FontSize="24" FontWeight="Normal" Margin="0,0,0,25" HorizontalAlignment="Center"/>
+
+                    <!-- Curvature -->
+                    <StackPanel Orientation="Horizontal" Margin="0,8">
+                        <TextBlock Text="Curvature:" Width="130" Foreground="#AAAAAA" FontSize="14" FontFamily="Consolas" Height="16" />
+                        <Slider x:Name="SldDistortion" Minimum="0" Maximum="0.4" Value="0.06" Width="500" TickFrequency="0.01" IsSnapToTickEnabled="True" ValueChanged="TweakChanged" Background="{x:Null}" Height="16"/>
+                        <TextBlock x:Name="TxtDistortion" Text="0.06" Width="50" VerticalAlignment="Center" Foreground="#00FF41" FontSize="14" FontFamily="Consolas" HorizontalAlignment="Right"/>
+                    </StackPanel>
+
+                    <!-- Chromatic -->
+                    <StackPanel Orientation="Horizontal" Margin="0,8">
+                        <TextBlock Text="Chromatic:" Width="130" Foreground="#AAAAAA" FontSize="14" FontFamily="Consolas" Height="16"/>
+                        <Slider x:Name="SldChromatic" Minimum="-6" Maximum="6.0" Value="0.8" Width="500" TickFrequency="0.1" IsSnapToTickEnabled="True" ValueChanged="TweakChanged" Height="16"/>
+                        <TextBlock x:Name="TxtChromatic" Text="0.8" Width="50" VerticalAlignment="Center" Foreground="#00FF41" FontSize="14" FontFamily="Consolas" HorizontalAlignment="Right"/>
+                    </StackPanel>
+
+                    <!-- Scanlines -->
+                    <StackPanel Orientation="Horizontal" Margin="0,8">
+                        <TextBlock Text="Scanline Dark:" Width="130" Foreground="#AAAAAA" FontSize="14" FontFamily="Consolas" Height="16"/>
+                        <Slider x:Name="SldScanline" Minimum="0" Maximum="1.0" Value="0.7" Width="500" TickFrequency="0.05" IsSnapToTickEnabled="True" ValueChanged="TweakChanged" Height="16"/>
+                        <TextBlock x:Name="TxtScanline" Text="0.70" Width="50" VerticalAlignment="Center" Foreground="#00FF41" FontSize="14" FontFamily="Consolas" HorizontalAlignment="Right"/>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal" Margin="0,8">
+                        <TextBlock Text="Scanline Freq:" Width="130" Foreground="#AAAAAA" FontSize="14" Height="16"/>
+                        <Slider x:Name="SldScanlineFreq" Minimum="0" Maximum="2.0" Value="0.75" Width="500" TickFrequency="0.001" IsSnapToTickEnabled="True" ValueChanged="TweakChanged" Height="16"/>
+                        <TextBlock x:Name="TxtScanlineFreq" Text="4.0" Width="50" VerticalAlignment="Center" Foreground="#00FF41" FontSize="14" FontFamily="Consolas" HorizontalAlignment="Right"/>
+                    </StackPanel>
+
+                    <!-- ✨ НОВОЕ: Phosphor Glow (двойная аберрация) -->
+                    <StackPanel Orientation="Horizontal" Margin="0,8">
+                        <TextBlock Text="Phosphor Glow:" Width="130" Foreground="#AAAAAA" FontSize="14" Height="16"/>
+                        <Slider x:Name="SldPhosphorGlow" Minimum="0" Maximum="15.0" Value="0" Width="500" TickFrequency="0.5" IsSnapToTickEnabled="True" ValueChanged="TweakChanged" Height="16"/>
+                        <TextBlock x:Name="TxtPhosphorGlow" Text="0.0" Width="50" VerticalAlignment="Center" Foreground="#00FF41" FontSize="14" HorizontalAlignment="Right"/>
+                    </StackPanel>
+
+                    <!-- ✨ НОВОЕ: Brightness Boost -->
+                    <StackPanel Orientation="Horizontal" Margin="0,8">
+                        <TextBlock Text="Brightness:" Width="130" Foreground="#AAAAAA" FontSize="14" Height="16"/>
+                        <Slider x:Name="SldBrightness" Minimum="0" Maximum="5.0" Value="0" Width="500" TickFrequency="0.05" IsSnapToTickEnabled="True" ValueChanged="TweakChanged" Height="16"/>
+                        <TextBlock x:Name="TxtBrightness" Text="0.00" Width="50" VerticalAlignment="Center" Foreground="#00FF41" FontSize="14" HorizontalAlignment="Right"/>
+                    </StackPanel>
+
+                    <!-- Noise -->
+                    <StackPanel Orientation="Horizontal" Margin="0,8">
+                        <TextBlock Text="Noise Amount:" Width="130" Foreground="#AAAAAA" FontSize="14" FontFamily="Consolas" Height="16"/>
+                        <Slider x:Name="SldNoise" Minimum="0" Maximum="1.5" Value="0.2" Width="500" TickFrequency="0.05" IsSnapToTickEnabled="True" ValueChanged="TweakChanged" Height="16"/>
+                        <TextBlock x:Name="TxtNoise" Text="0.20" Width="50" VerticalAlignment="Center" Foreground="#00FF41" FontSize="14" FontFamily="Consolas" HorizontalAlignment="Right"/>
+                    </StackPanel>
+
+                    <!-- Glitch Speed -->
+                    <StackPanel Orientation="Horizontal" Margin="0,8">
+                        <TextBlock Text="Glitch Speed:" Width="130" Foreground="#AAAAAA" FontSize="14" FontFamily="Consolas" Height="16"/>
+                        <Slider x:Name="SldSpeed" Minimum="0" Maximum="10.0" Value="0.3" Width="500" TickFrequency="0.1" IsSnapToTickEnabled="True" ValueChanged="TweakChanged" Height="16"/>
+                        <TextBlock x:Name="TxtSpeed" Text="0.3" Width="50" VerticalAlignment="Center" Foreground="#00FF41" FontSize="14" FontFamily="Consolas" HorizontalAlignment="Right"/>
+                    </StackPanel>
+
+                    <!-- Glitch Width -->
+                    <StackPanel Orientation="Horizontal" Margin="0,8">
+                        <TextBlock Text="Glitch Width:" Width="130" VerticalAlignment="Center" Foreground="#AAAAAA" FontSize="14" FontFamily="Consolas"/>
+                        <Slider x:Name="SldWidth" Minimum="5" Maximum="200" Value="20" Width="500" TickFrequency="1" IsSnapToTickEnabled="True" ValueChanged="TweakChanged" Height="16" />
+                        <TextBlock x:Name="TxtWidth" Text="20" Width="50" VerticalAlignment="Center" Foreground="#00FF41" FontSize="14" FontFamily="Consolas" HorizontalAlignment="Right"/>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+            <!-- 3. ПРАВАЯ КОЛОНКА: ТЕМА + КНОПКА СБРОСА -->
+            <Border Grid.Column="2" BorderBrush="#FFD700" BorderThickness="2" CornerRadius="8" Padding="15,15,15,15" Margin="10,0,0,0">
+                <StackPanel Grid.Column="2" Margin="0,0,0,0" >
+                    <TextBlock Text="[ INTERFACE THEME ]" Foreground="#FFD700" FontSize="24" FontWeight="Normal" Margin="0,0,0,15" FontFamily="/Gardian;component/Assets/DOS.ttf#PerfectDOSVGA437" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <TextBlock Text="Select base color palette:" Foreground="#888888" FontSize="16" FontFamily="Consolas" Margin="0,0,0,20"/>
+
+                    <!-- Радио-кнопки вместо уродливого ComboBox -->
+                    <RadioButton x:Name="RadGreen" Content="Phosphor Green" Foreground="#00FF41" FontSize="14" FontFamily="Consolas" Margin="0,8" IsChecked="True" GroupName="ThemeGroup" Checked="ThemeChanged"/>
+                    <RadioButton x:Name="RadAmber" Content="Amber Monochrome" Foreground="#FFB000" FontSize="14" FontFamily="Consolas" Margin="0,8" GroupName="ThemeGroup" Checked="ThemeChanged"/>
+                    <RadioButton x:Name="RadWhite" Content="White Phosphor" Foreground="#FFFFFF" FontSize="14" FontFamily="Consolas" Margin="0,8" GroupName="ThemeGroup" Checked="ThemeChanged"/>
+                    <RadioButton x:Name="RadCyberpunk" Content="Cyberpunk Pink" Foreground="#FF00FF" FontSize="16" FontFamily="Consolas" Margin="0,8" GroupName="ThemeGroup" Checked="ThemeChanged"/>
+                    <RadioButton x:Name="RadWin98" Content="Windows 98" Foreground="#008080" FontSize="16" FontFamily="Consolas" Margin="0,8" GroupName="ThemeGroup" Checked="ThemeChanged"/>
+                    <Button Content="Default CRT settings" Width="220" Height="45" 
+                        Background="#1A1A1A" Foreground="#FF00FF41" BorderBrush="#FF00FF41" BorderThickness="2"
+                        FontFamily="Consolas" FontSize="14" FontWeight="Bold" Cursor="Hand"
+                        Click="ResetToRecommended_Click" HorizontalAlignment="Left" Margin="0,15,0,0">
+                        <Button.Style>
+                            <Style TargetType="{x:Type Button}">
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="{x:Type Button}">
+                                            <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="4">
+                                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#FFD700"/>
+                                        <Setter Property="Foreground" Value="#000000"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+
+                    <!-- Кнопка сброса к рекомендованным значениям -->
+                    <TextBlock Text="Reset sliders to optimal defaults." Foreground="#FF555555" FontSize="12" FontFamily="Consolas" Margin="5,5,0,0" HorizontalAlignment="Left" FontStyle="Italic"/>
+                </StackPanel>
+            </Border>
+        </Grid>
+
+        <!-- РАЗДЕЛИТЕЛЬ -->
+
+
+        <!-- ========================================== -->
+        <!-- НИЖНЯЯ ЧАСТЬ: TABS + PREVIEW + КНОПКИ -->
+        <!-- ========================================== -->
+        <Border Grid.Row="2" Background="#111111" BorderBrush="#FFD700" BorderThickness="2" CornerRadius="8" Margin="0,20,0,0">
+            <Grid Margin="20">
+                <Grid.ColumnDefinitions>
+                    <!-- Левая часть: Вкладки (описание + пресеты) -->
+                    <ColumnDefinition Width="1*" />
+                    <!-- Правая часть: Превью + кнопки -->
+                    <ColumnDefinition Width="1.5*" />
+                </Grid.ColumnDefinitions>
+
+                <!-- ========================================== -->
+                <!-- ЛЕВАЯ ЧАСТЬ: TABCONTROL -->
+                <!-- ========================================== -->
+                <TabControl Grid.Column="0" Margin="0,0,20,0" Background="Transparent" BorderBrush="#FFD700" BorderThickness="2">
+
+                    <!-- ВКЛАДКА 1: ОПИСАНИЕ НАСТРОЕК -->
+                    <TabItem Header="[ INFO ]" FontFamily="/Gardian;component/Assets/DOS.ttf#PerfectDOSVGA437" FontSize="20" Foreground="#FFD700" Background="#FF4A4A4A">
+                        <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="10">
+                            <StackPanel>
+                                <TextBlock Text="EFFECTS TOGGLES (F1-F4):" Foreground="#FFD700" FontSize="20" FontWeight="Bold" Margin="0,0,0,10"/>
+                                <TextBlock TextWrapping="Wrap" Foreground="#AAAAAA" FontSize="16" Margin="0,0,0,15">
+                            <Run Foreground="#00FF41">F1 - Scanlines:</Run> Horizontal CRT scan lines.<LineBreak/>
+                            <Run Foreground="#00FF41">F2 - Curvature:</Run> Barrel distortion like real CRT glass.<LineBreak/>
+                            <Run Foreground="#00FF41">F3 - Chromatic:</Run> RGB color separation at edges.<LineBreak/>
+                            <Run Foreground="#00FF41">F4 - Glow+Noise:</Run> Phosphor bloom and signal noise.
+                                </TextBlock>
+
+                                <TextBlock Text="ADVANCED SLIDERS:" Foreground="#FFD700" FontSize="20" FontWeight="Bold" Margin="0,0,0,10"/>
+                                <TextBlock TextWrapping="Wrap" Foreground="#AAAAAA" FontSize="16" Margin="0,0,0,15">
+                            <Run Foreground="#00FF41">Curvature:</Run> Good: 0.0-0.6; higher - "Fish eye"<LineBreak/>
+                            <Run Foreground="#00FF41">Chromatic:</Run> RGB shift intensity. &lt;0 - shift to right; &gt;0 - shift to left <LineBreak/>
+                            <Run Foreground="#00FF41">Scanline Dark:</Run> Darkness of scan lines. From "Off" to "Hard to read"<LineBreak/>
+                            <Run Foreground="#00FF41">Scanline Freq:</Run> Distance between lines.<LineBreak/>
+                            <Run Foreground="#00FF41">Phosphor Glow:</Run> Dual-sided aberration bloom.<LineBreak/>
+                            <Run Foreground="#00FF41">Brightness:</Run> Overall luminance boost. Optimal values: 0 - 2.5<LineBreak/>
+                            <Run Foreground="#00FF41">Noise:</Run> Signal interference amount.<LineBreak/>
+                            <Run Foreground="#00FF41">Glitch Spd/Wdt:</Run> Moving distortion band.
+                                </TextBlock>
+
+                                <TextBlock Text="THEMES:" Foreground="#FFD700" FontSize="20" FontWeight="Bold" Margin="0,0,0,10"/>
+                                <TextBlock TextWrapping="Wrap" Foreground="#AAAAAA" FontSize="16">
+                            Select a system appearance for the system interface. Changes apply instantly to all text and UI elements.
+                                </TextBlock>
+                                <TextBlock Text="ADVANCED SLIDERS:" Foreground="#FFD700" FontSize="20" FontWeight="Bold" Margin="0,15,0,10"/>
+                                <TextBlock TextWrapping="Wrap" Foreground="#AAAAAA" FontSize="16" Margin="0,0,0,15">
+                                    Group <Run Foreground="#FFD700">[PRESETS]</Run> contains a few buttons with preset values. <LineBreak></LineBreak>
+                                    <Run Foreground="#00FF41">NOTE:</Run> The recommended values have been tested on the Avrego terminal and may display differently on terminals of newer versions and other manufacturers. You can change values after pressing one of the presets for better experience.
+
+                                </TextBlock>
+                            </StackPanel>
+                        </ScrollViewer>
+                    </TabItem>
+
+                    <!-- ВКЛАДКА 2: ПРЕСЕТЫ -->
+                    <TabItem Header="[ PRESETS ]" FontFamily="/Gardian;component/Assets/DOS.ttf#PerfectDOSVGA437" FontSize="20" Foreground="#FFD700" Background="#FF4A4A4A">
+                        <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="10">
+                            <StackPanel>
+                                <TextBlock Text="QUICK CONFIGURATIONS:" Foreground="#FFD700" FontSize="20" FontWeight="Bold" Margin="0,0,0,15"/>
+
+                                <!-- Пресет 1: Modern Flat -->
+                                <Button Content="Modern Flat Monitor" Width="Auto" HorizontalAlignment="Stretch" Height="40" Margin="0,0,0,10" 
+                                Background="#1A1A1A" Foreground="#00FF41" BorderBrush="#00FF41" BorderThickness="1"
+                                FontFamily="Consolas" FontSize="16" Cursor="Hand" Click="PresetModern_Click">
+                                    <Button.Style>
+                                        <Style TargetType="Button">
+                                            <Setter Property="Template">
+                                                <Setter.Value>
+                                                    <ControlTemplate TargetType="Button">
+                                                        <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="3">
+                                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                        </Border>
+                                                    </ControlTemplate>
+                                                </Setter.Value>
+                                            </Setter>
+                                            <Style.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter Property="Background" Value="#00FF41"/>
+                                                    <Setter Property="Foreground" Value="#000000"/>
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Button.Style>
+                                </Button>
+                                <TextBlock Text="Minimal CRT effects, clean image." Foreground="#555555" FontSize="11" Margin="0,0,0,15" FontStyle="Italic"/>
+
+                                <!-- Пресет 2: Classic CRT -->
+                                <Button Content="Classic 90s CRT" Width="Auto" HorizontalAlignment="Stretch" Height="40" Margin="0,0,0,10" 
+                                Background="#1A1A1A" Foreground="#FFB000" BorderBrush="#FFB000" BorderThickness="1"
+                                FontFamily="Consolas" FontSize="16" Cursor="Hand" Click="PresetClassic_Click">
+                                    <Button.Style>
+                                        <Style TargetType="Button">
+                                            <Setter Property="Template">
+                                                <Setter.Value>
+                                                    <ControlTemplate TargetType="Button">
+                                                        <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="3">
+                                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                        </Border>
+                                                    </ControlTemplate>
+                                                </Setter.Value>
+                                            </Setter>
+                                            <Style.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter Property="Background" Value="#FFB000"/>
+                                                    <Setter Property="Foreground" Value="#000000"/>
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Button.Style>
+                                </Button>
+                                <TextBlock Text="Balanced retro look with soft glow." Foreground="#555555" FontSize="11" Margin="0,0,0,15" FontStyle="Italic"/>
+
+                                <!-- Пресет 3: Heavy Glitch -->
+                                <Button Content="Broken TV / Glitch" Width="Auto" HorizontalAlignment="Stretch" Height="40" Margin="0,0,0,10" 
+                                Background="#1A1A1A" Foreground="#FF3333" BorderBrush="#FF3333" BorderThickness="1"
+                                FontFamily="Consolas" FontSize="16" Cursor="Hand" Click="PresetGlitch_Click">
+                                    <Button.Style>
+                                        <Style TargetType="Button">
+                                            <Setter Property="Template">
+                                                <Setter.Value>
+                                                    <ControlTemplate TargetType="Button">
+                                                        <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="3">
+                                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                        </Border>
+                                                    </ControlTemplate>
+                                                </Setter.Value>
+                                            </Setter>
+                                            <Style.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter Property="Background" Value="#FF3333"/>
+                                                    <Setter Property="Foreground" Value="#000000"/>
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Button.Style>
+                                </Button>
+                                <TextBlock Text="Aggressive distortion and noise." Foreground="#555555" FontSize="11" Margin="0,0,0,15" FontStyle="Italic"/>
+
+                                <!-- Пресет 4: Military Terminal -->
+                                <Button Content="Military Terminal" Width="Auto" HorizontalAlignment="Stretch" Height="40" Margin="0,0,0,10" 
+                                Background="#1A1A1A" Foreground="#00FFFF" BorderBrush="#00FFFF" BorderThickness="1"
+                                FontFamily="Consolas" FontSize="16" Cursor="Hand" Click="PresetMilitary_Click">
+                                    <Button.Style>
+                                        <Style TargetType="Button">
+                                            <Setter Property="Template">
+                                                <Setter.Value>
+                                                    <ControlTemplate TargetType="Button">
+                                                        <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="3">
+                                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                        </Border>
+                                                    </ControlTemplate>
+                                                </Setter.Value>
+                                            </Setter>
+                                            <Style.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter Property="Background" Value="#00FFFF"/>
+                                                    <Setter Property="Foreground" Value="#000000"/>
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Button.Style>
+                                </Button>
+                                <TextBlock Text="Sharp, high-contrast, no chromatic." Foreground="#555555" FontSize="11" Margin="0,0,0,15" FontStyle="Italic"/>
+
+                                <!-- Разделитель -->
+                                <Rectangle Height="1" Fill="#333333" Margin="0,10"/>
+
+                                <!-- Кнопка сброса -->
+                                <Button Content="⟲ DEFAULT CRT SETTINGS" Width="Auto" HorizontalAlignment="Stretch" Height="40" Margin="0,15,0,0" 
+                                Background="#1A1A1A" Foreground="#FFD700" BorderBrush="#FFD700" BorderThickness="2"
+                                FontFamily="Consolas" FontSize="14" FontWeight="Bold" Cursor="Hand"
+                                Click="ResetToRecommended_Click">
+                                    <Button.Style>
+                                        <Style TargetType="Button">
+                                            <Setter Property="Template">
+                                                <Setter.Value>
+                                                    <ControlTemplate TargetType="Button">
+                                                        <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="3">
+                                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                        </Border>
+                                                    </ControlTemplate>
+                                                </Setter.Value>
+                                            </Setter>
+                                            <Style.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter Property="Background" Value="#FFD700"/>
+                                                    <Setter Property="Foreground" Value="#000000"/>
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Button.Style>
+                                </Button>
+                            </StackPanel>
+                        </ScrollViewer>
+                    </TabItem>
+                </TabControl>
+
+                <!-- ========================================== -->
+                <!-- ПРАВАЯ ЧАСТЬ: PREVIEW + КНОПКИ -->
+                <!-- ========================================== -->
+                <Grid Grid.Column="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Заголовок превью -->
+                    <TextBlock Grid.Row="0" Text="[ C:\PREVIEW ]" Foreground="#FFD700" FontSize="24" 
+                       FontFamily="/Gardian;component/Assets/DOS.ttf#PerfectDOSVGA437" 
+                       HorizontalAlignment="Center" Margin="0,0,0,10"/>
+
+                    <!-- Превью (сдвинуто вправо через Margin) -->
+                    <controls:CrtPreviewPanel x:Name="PreviewPanel" Grid.Row="1" 
+                                      Width="700" Height="500" 
+                                      HorizontalAlignment="Center" VerticalAlignment="Center"
+                                      Margin="40,0,0,0"/>
+
+                    <!-- Кнопки под превью -->
+                    <StackPanel Grid.Row="2" Margin="0,15,0,0">
+                        <!-- Кнопки переключения режимов превью -->
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,15">
+                            <Button Content="TV Test Pattern" Width="160" Height="36" Margin="10,0" Click="PreviewMode1_Click" 
+                            Background="#222" Foreground="#AAAAAA" BorderBrush="#555" FontFamily="Consolas" FontSize="14" Cursor="Hand"/>
+                            <Button Content="RGB Text" Width="160" Height="36" Margin="10,0" Click="PreviewMode2_Click" 
+                            Background="#222" Foreground="#AAAAAA" BorderBrush="#555" FontFamily="Consolas" FontSize="14" Cursor="Hand"/>
+                            <Button Content="Theme Placeholder" Width="160" Height="36" Margin="10,0" Click="PreviewMode3_Click" 
+                            Background="#222" Foreground="#AAAAAA" BorderBrush="#555" FontFamily="Consolas" FontSize="14" Cursor="Hand"/>
+                        </StackPanel>
+
+                        <!-- Кнопки OK/Cancel -->
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                            <Button Content="CANCEL (ESC)" Width="160" Height="45" Margin="0,0,25,0" Click="BtnCancel_Click" 
+                            Background="Transparent" Foreground="#FF4444" BorderBrush="#FF4444" BorderThickness="2" 
+                            FontFamily="/Gardian;component/Assets/DOS.ttf#PerfectDOSVGA437" FontSize="16" Cursor="Hand"/>
+                            <Button Content="OK (ENTER)" Width="160" Height="45" Click="BtnOk_Click" 
+                            Background="#00FF41" Foreground="#000000" BorderBrush="#00FF41" BorderThickness="2" 
+                            FontFamily="/Gardian;component/Assets/DOS.ttf#PerfectDOSVGA437" FontSize="16" Cursor="Hand"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Grid>
+            </Grid>
+        </Border>
+
+        <!-- КНОПКИ УПРАВЛЕНИЯ ОКНОМ -->
+
+    </Grid>
+</Window>

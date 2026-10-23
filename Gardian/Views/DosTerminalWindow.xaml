@@ -1,0 +1,45 @@
+﻿<Window x:Class="Gardian.Views.DosTerminalWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:effects="clr-namespace:Gardian.Effects"
+        Title="GARDIAN TERMINAL" WindowState="Maximized" ResizeMode="NoResize" ShowInTaskbar="True"
+        WindowStyle="None"
+        Background="#0A0A0A"
+        PreviewKeyDown="Window_PreviewKeyDown"
+        PreviewMouseLeftButtonDown="Window_MouseDown"
+        SizeChanged="Window_SizeChanged">
+
+    <Grid x:Name="RootGrid">
+        <!-- ✅ Шейдер должен быть ПЕРЕД контентом (property element) -->
+        <Grid.Effect>
+            <effects:CrtShaderEffect x:Name="CrtEffect"
+                                     Time="0"
+                                     Scale="2"
+                                     Resolution="640,480"
+                                     EnableDistortion="1"
+                                     EnableNoise="1"
+                                     EnableChromatic="1"
+                                     EnableBlur="0"
+                                     EnableScanline="1"/>
+        </Grid.Effect>
+
+        <!-- Основной контент терминала -->
+        <DockPanel LastChildFill="True">
+            <Border DockPanel.Dock="Bottom" Background="#0A0A0A" Padding="8,6" 
+                    BorderBrush="#333" BorderThickness="0,1,0,0" Focusable="False">
+                <StackPanel Orientation="Horizontal" Focusable="False">
+                    <TextBlock x:Name="PromptBlock" Text="C:\GARDIAN> " Foreground="#AAAAAA" 
+                               FontFamily="Consolas" FontSize="14" VerticalAlignment="Center" Focusable="False"/>
+                    <TextBox x:Name="CmdInput" Background="Transparent" BorderThickness="0" 
+                             Foreground="#00FF41" FontFamily="Consolas" FontSize="14" CaretBrush="#00FF41"
+                             AcceptsReturn="False" TextWrapping="NoWrap"
+                             PreviewKeyDown="CmdInput_PreviewKeyDown"/>
+                </StackPanel>
+            </Border>
+            <ScrollViewer x:Name="LogScroll" VerticalScrollBarVisibility="Auto" Focusable="False">
+                <TextBlock x:Name="OutputLog" FontFamily="Consolas" FontSize="14" 
+                           Padding="8" TextWrapping="Wrap" Margin="0,0,0,4" Focusable="False"/>
+            </ScrollViewer>
+        </DockPanel>
+    </Grid>
+</Window>

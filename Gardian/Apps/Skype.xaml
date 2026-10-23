@@ -1,0 +1,192 @@
+﻿<UserControl x:Class="Gardian.Apps.SkypeApp"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             MinWidth="500" MinHeight="400"
+             Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"
+             TextOptions.TextFormattingMode="Display"
+             TextOptions.TextRenderingMode="Aliased"
+             FontFamily="Tahoma, 'MS Sans Serif', sans-serif"
+             FontSize="11">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <!-- Профиль -->
+            <RowDefinition Height="*"/>
+            <!-- Основная зона -->
+        </Grid.RowDefinitions>
+
+        <!-- 1. Панель пользователя (теперь в Row 0) -->
+        <Border Grid.Row="0" Margin="5" Padding="5" 
+                Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}"
+                BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}"
+                BorderThickness="1">
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                <Ellipse Width="12" Height="12" Fill="#32CD32" Stroke="Green" StrokeThickness="1" Margin="0,0,8,0"/>
+                <TextBlock Text="retro_user (Online)" FontWeight="Bold" VerticalAlignment="Center"/>
+            </StackPanel>
+        </Border>
+
+        <!-- 2. Две колонки -->
+        <Grid Grid.Row="1" Margin="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="200" MinWidth="150"/>
+                <!-- Контакты -->
+                <ColumnDefinition Width="5" />
+                <!-- Разделитель -->
+                <ColumnDefinition Width="*" MinWidth="250"/>
+                <!-- Чат -->
+            </Grid.ColumnDefinitions>
+
+            <!-- ЛЕВАЯ ЧАСТЬ: Вкладки и контакты -->
+            <TabControl Grid.Column="0" Background="Transparent">
+                <TabItem Header="Contacts">
+                    <ListBox x:Name="ContactsList" BorderThickness="1" Margin="2" 
+                             Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}">
+                        <ListBoxItem>
+                            <StackPanel Orientation="Horizontal">
+                                <!-- Маленькая аватарка в списке -->
+                                <Ellipse Width="10" Height="10" Fill="#32CD32" Stroke="Green" StrokeThickness="1" Margin="0,0,5,0" VerticalAlignment="Center"/>
+                                <Image Source="/Gardian;component/Assets/avatar_echo.png" Width="16" Height="16" Margin="0,0,5,0" RenderOptions.BitmapScalingMode="NearestNeighbor"/>
+                                <TextBlock Text="Echo-bot (Message Test)" FontWeight="Bold" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </ListBoxItem>
+                        <ListBoxItem>
+                            <StackPanel Orientation="Horizontal">
+                                <Ellipse Width="10" Height="10" Fill="#32CD32" Stroke="Green" StrokeThickness="1" Margin="0,0,5,0" VerticalAlignment="Center"/>
+                                <Image Source="/Gardian;component/Assets/avatar_icarus.png" Width="16" Height="16" Margin="0,0,5,0" RenderOptions.BitmapScalingMode="NearestNeighbor"/>
+                                <TextBlock Text="Icarus (AI, Deputy Director)" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </ListBoxItem>
+                        <ListBoxItem>
+                            <StackPanel Orientation="Horizontal">
+                                <Ellipse  Width="10" Height="10" Fill="#32CD32" Stroke="Green" StrokeThickness="1" Margin="0,0,5,0" VerticalAlignment="Center"/>
+                                <Image Source="/Gardian;component/Assets/avatar_garden.png" Width="16" Height="16" Margin="0,0,5,0" RenderOptions.BitmapScalingMode="NearestNeighbor"/>
+                                <TextBlock Text="Gifted Garden (First Vice Director)" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </ListBoxItem>
+                        <ListBoxItem>
+                            <StackPanel Orientation="Horizontal">
+                                <Ellipse Width="10" Height="10" Fill="#32CD32" Stroke="Green" StrokeThickness="1" Margin="0,0,5,0" VerticalAlignment="Center"/>
+                                <Image Source="/Gardian;component/Assets/avatar_ruby.png" Width="16" Height="16" Margin="0,0,5,0" RenderOptions.BitmapScalingMode="NearestNeighbor"/>
+                                <TextBlock Text="Graphite Ruby (Second Vice Director)" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </ListBoxItem>
+                        
+                    </ListBox>
+                </TabItem>
+                <TabItem Header="Call History" />
+            </TabControl>
+
+            <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" 
+                          Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"/>
+
+            <!-- ПРАВАЯ ЧАСТЬ: Чат и Звонки -->
+            <Grid Grid.Column="2" Margin="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <!-- Шапка чата с аватаром -->
+                    <RowDefinition Height="*"/>
+                    <!-- Лог сообщений -->
+                    <RowDefinition Height="Auto"/>
+                    <!-- Панель действий (Ввод ИЛИ Визуальная новелла) -->
+                </Grid.RowDefinitions>
+
+                <!-- Шапка чата с крупным аватаром -->
+                <Border Grid.Row="0" Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" 
+                        BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}" 
+                        BorderThickness="1" Padding="5" Margin="0,0,0,5">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="/Gardian;component/Assets/avatar_echo.png" Width="32" Height="32" Margin="0,0,10,0" RenderOptions.BitmapScalingMode="NearestNeighbor"/>
+                        <StackPanel VerticalAlignment="Center">
+                            <TextBlock Text="Echo-bot" FontWeight="Bold" FontSize="12"/>
+                            <TextBlock Text="Status: Online" FontSize="10" Foreground="Gray"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+                <!-- Лог чата -->
+                <TextBox Grid.Row="1" x:Name="ChatLog" IsReadOnly="True" VerticalScrollBarVisibility="Auto" 
+                         TextWrapping="Wrap" Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}"
+                         BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}" BorderThickness="1"
+                         FontFamily="Tahoma" FontSize="11" Padding="3"/>
+
+                <!-- ПАНЕЛЬ ДЕЙСТВИЙ -->
+                <Grid Grid.Row="2" Margin="0,5,0,0">
+
+                    <!-- Режим 1: Обычный чат (Ввод текста и кнопки звонка) -->
+                    <Grid x:Name="NormalChatPanel">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <!-- Кнопки звонка (WinXP Style Gradients) -->
+                        <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,5">
+                            <Button Content="📞 Call" Width="90" Height="26" FontWeight="Bold" Foreground="White" 
+                                    Click="Call_Click" Margin="5,0">
+                                <Button.Background>
+                                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                        <GradientStop Color="#66FF66" Offset="0.0"/>
+                                        <GradientStop Color="#00AA00" Offset="1.0"/>
+                                    </LinearGradientBrush>
+                                </Button.Background>
+                                <Button.BorderBrush>
+                                    <SolidColorBrush Color="#006600"/>
+                                </Button.BorderBrush>
+                                <Button.BorderThickness>1</Button.BorderThickness>
+                            </Button>
+                            <Button Content="✕ End" Width="70" Height="26" FontWeight="Bold" Foreground="White" 
+                                    IsEnabled="False" x:Name="BtnEndCall" Click="EndCall_Click" Margin="5,0">
+                                <Button.Background>
+                                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                        <GradientStop Color="#FF6666" Offset="0.0"/>
+                                        <GradientStop Color="#AA0000" Offset="1.0"/>
+                                    </LinearGradientBrush>
+                                </Button.Background>
+                                <Button.BorderBrush>
+                                    <SolidColorBrush Color="#660000"/>
+                                </Button.BorderBrush>
+                                <Button.BorderThickness>1</Button.BorderThickness>
+                            </Button>
+                        </StackPanel>
+
+                        <!-- Поле ввода -->
+                        <Grid Grid.Row="1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBox Grid.Column="0" x:Name="MessageInput" Height="24" VerticalAlignment="Center"
+                                     Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}"
+                                     BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}" BorderThickness="1"
+                                     KeyDown="MessageInput_KeyDown"/>
+                            <Button Grid.Column="1" Content="Send" Width="65" Height="24" Margin="5,0,0,0" Click="Send_Click"/>
+                        </Grid>
+                    </Grid>
+
+                    <!-- Режим 2: Визуальная новелла (Скрыт по умолчанию) -->
+                    <Border x:Name="VisualNovelPanel" Visibility="Collapsed" 
+                            Background="#CC000000" BorderBrush="#FFD700" BorderThickness="2" CornerRadius="4" Padding="10">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+                            <!-- Текст субтитров -->
+                            <TextBlock x:Name="VN_Subtitle" Grid.Row="0" Text="..." Foreground="White" 
+                                       FontSize="14" FontWeight="Bold" TextWrapping="Wrap" Margin="0,0,0,10"/>
+
+                            <!-- Варианты ответов -->
+                            <StackPanel x:Name="VN_Choices" Grid.Row="1" Orientation="Vertical">
+                                <!-- Кнопки будут добавляться динамически из C# -->
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+
+                </Grid>
+            </Grid>
+        </Grid>
+    </Grid>
+</UserControl>
