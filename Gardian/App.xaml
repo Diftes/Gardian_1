@@ -13,7 +13,7 @@
             <Setter Property="ShowInTaskbar" Value="False"/>
         </Style>
     </Application.Resources>
-</Application>
+</Application>.
 
 
 
