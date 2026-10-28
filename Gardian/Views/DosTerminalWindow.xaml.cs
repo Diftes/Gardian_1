@@ -11,7 +11,7 @@ using Gardian.Utils; // ← ДОБАВЛЕНО: для KeyboardHandler
 
 namespace Gardian.Views
 {
-    public partial class DosTerminalWindow : Window
+    public partial class DosTerminalWindow : CrtWindow
     {
         private readonly List<string> _history = new();
         private int _historyIndex = -1;
@@ -48,19 +48,11 @@ namespace Gardian.Views
                 }), System.Windows.Threading.DispatcherPriority.Input);
             };
 
-            _shaderTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(30) };
-            _shaderTimer.Tick += (s, e) =>
-            {
-                if (CrtEffect != null)
-                {
-                    CrtEffect.Time += 0.03;
-                    CrtEffect.Resolution = new Vector(ActualWidth, ActualHeight);
-                }
-            };
-            _shaderTimer.Start();
+           
+            
 
             // Применяем текущие настройки шейдера при запуске
-            UpdateShaderFromSettings();
+            
             ApplyCurrentTheme();
         }
 

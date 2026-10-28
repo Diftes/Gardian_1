@@ -8,7 +8,7 @@
     <Grid>
         <ScrollViewer x:Name="LogScroll" VerticalScrollBarVisibility="Disabled">
             <TextBlock x:Name="BootLog" Foreground="#A8A8A8" FontFamily="Consolas" 
-                       FontSize="13" TextWrapping="NoWrap" Padding="16,20" LineHeight="22"/>
+                       FontSize="13" TextWrapping="NoWrap" Padding="16,20" LineHeight="22" Style="{StaticResource GlowingText}"/>
         </ScrollViewer>
         <ProgressBar x:Name="BootBar" Visibility="Collapsed" Height="16" Margin="16" 
                      VerticalAlignment="Bottom" Foreground="#AAAAAA" Background="#1A1A1A"/>

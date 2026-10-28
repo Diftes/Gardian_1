@@ -1,6 +1,7 @@
-﻿<Window x:Class="Gardian.Views.DosTerminalWindow"
+﻿<utils:CrtWindow x:Class="Gardian.Views.DosTerminalWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:utils="clr-namespace:Gardian.Utils"
         xmlns:effects="clr-namespace:Gardian.Effects"
         Title="GARDIAN TERMINAL" WindowState="Maximized" ResizeMode="NoResize" ShowInTaskbar="True"
         WindowStyle="None"
@@ -28,7 +29,7 @@
                     BorderBrush="#333" BorderThickness="0,1,0,0" Focusable="False">
                 <StackPanel Orientation="Horizontal" Focusable="False">
                     <TextBlock x:Name="PromptBlock" Text="C:\GARDIAN> " Foreground="#AAAAAA" 
-                               FontFamily="Consolas" FontSize="14" VerticalAlignment="Center" Focusable="False"/>
+                               FontFamily="Consolas" FontSize="14" VerticalAlignment="Center" Focusable="False" Style="{StaticResource GlowingText}"/>
                     <TextBox x:Name="CmdInput" Background="Transparent" BorderThickness="0" 
                              Foreground="#00FF41" FontFamily="Consolas" FontSize="14" CaretBrush="#00FF41"
                              AcceptsReturn="False" TextWrapping="NoWrap"
@@ -37,8 +38,8 @@
             </Border>
             <ScrollViewer x:Name="LogScroll" VerticalScrollBarVisibility="Auto" Focusable="False">
                 <TextBlock x:Name="OutputLog" FontFamily="Consolas" FontSize="14" 
-                           Padding="8" TextWrapping="Wrap" Margin="0,0,0,4" Focusable="False"/>
+                           Padding="8" TextWrapping="Wrap" Margin="0,0,0,4" Focusable="False" Style="{StaticResource GlowingText}"/>
             </ScrollViewer>
         </DockPanel>
     </Grid>
-</Window>
+</utils:CrtWindow>

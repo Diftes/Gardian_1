@@ -2,18 +2,18 @@
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
-using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
 using Gardian.Apps;
 using Gardian.Controls;
 using Gardian.Managers;
+using Gardian.Utils;
 using Gardian.ViewModels;
 
 namespace Gardian.Views
 {
-    public partial class OsDesktopWindow : Window
+    // НАСЛЕДУЕМСЯ ОТ CrtWindow, А НЕ ОТ Window
+    public partial class OsDesktopWindow : CrtWindow
     {
         private readonly DispatcherTimer _clockTimer;
         private readonly List<MockWindow> _openWindows = new();
@@ -23,42 +23,19 @@ namespace Gardian.Views
         {
             InitializeComponent();
 
-            // 1. Подписываемся на изменения настроек (ОДИН РАЗ)
-            SettingsManager.SettingsChanged += OnSettingsChanged;
-
-            // 2. Сразу применяем текущие настройки из памяти
-            ApplyShaderSettings();
-            ApplyThemeToDesktop();
-
-            // 3. Таймер часов
+            // Таймер часов
             _clockTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1) };
             _clockTimer.Tick += (s, e) => ClockText.Text = DateTime.Now.ToString("HH:mm");
             _clockTimer.Start();
-        }
 
-        // === ОБРАБОТКА ИЗМЕНЕНИЙ НАСТРОЕК ===
-        private void OnSettingsChanged()
-        {
-            ApplyShaderSettings();
+            // Подписка на тему (шейдером занимается базовый класс CrtWindow)
+            SettingsManager.SettingsChanged += OnSettingsChanged;
             ApplyThemeToDesktop();
         }
 
-        private void ApplyShaderSettings()
+        private void OnSettingsChanged()
         {
-            if (CrtEffect == null) return;
-
-            CrtEffect.EnableDistortion = SettingsManager.EnableVignette ? 1.0 : 0.0;
-            CrtEffect.EnableChromatic = SettingsManager.EnableChromatic ? 1.0 : 0.0;
-            CrtEffect.EnableBlur = SettingsManager.EnableBlur ? 1.0 : 0.0;
-            CrtEffect.EnableNoise = SettingsManager.EnableNoise ? 1.0 : 0.0;
-            CrtEffect.GlowStrength = SettingsManager.EnableBlur ? 0.4 : 0.0;
-            CrtEffect.DistortionAmount = SettingsManager.DistortionAmount;
-            CrtEffect.ChromaticSpread = SettingsManager.ChromaticSpread;
-            CrtEffect.PhosphorGlow = SettingsManager.PhosphorGlow;
-            CrtEffect.BrightnessBoost = SettingsManager.BrightnessBoost;
-            CrtEffect.NoiseAmount = SettingsManager.NoiseAmount;
-            CrtEffect.LineSpeed = SettingsManager.LineSpeed;
-            CrtEffect.LineWidth = SettingsManager.LineWidth;
+            ApplyThemeToDesktop();
         }
 
         private void ApplyThemeToDesktop()
@@ -68,14 +45,11 @@ namespace Gardian.Views
                 : SettingsManager.GetDesktopBackgroundColor();
 
             RootGrid.Background = new SolidColorBrush(bgColor);
-
-            // Панель задач просто меняет цвет, без рамок
             Taskbar.Background = new SolidColorBrush(SettingsManager.GetControlFaceColor());
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            // Если не авторизован — выкидываем в DOS
             if (!UserSessionManager.IsLoggedIn)
             {
                 var terminal = new DosTerminalWindow();
@@ -87,28 +61,27 @@ namespace Gardian.Views
 
         private void Window_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
-            // F12 — открыть/закрыть записку с хоткеями
-            if (e.Key == Key.F12)
+            if (e.Key == System.Windows.Input.Key.F12)
             {
                 ToggleHotkeysNote();
                 e.Handled = true;
                 return;
             }
 
-            // Остальные хоткеи (F3-F9) обрабатывает KeyboardHandler
             if (Gardian.Utils.KeyboardHandler.HandleHotkeys(e.Key))
             {
                 e.Handled = true;
                 SettingsManager.Apply();
             }
         }
+
         private void ToggleHotkeysNote()
         {
             if (_hotkeysNote == null || !_hotkeysNote.IsVisible)
             {
                 _hotkeysNote = new HotkeysNoteWindow();
-                _hotkeysNote.Left = 20;
-                _hotkeysNote.Top = 20;
+                _hotkeysNote.Left = this.Left + 20;
+                _hotkeysNote.Top = this.Top + 20;
                 _hotkeysNote.Show();
             }
             else
@@ -118,7 +91,6 @@ namespace Gardian.Views
             }
         }
 
-        // === УПРАВЛЕНИЕ ОКНАМИ ===
         private void Icon_TestWindow_Click(object sender, RoutedEventArgs e) => OpenMockWindow("Test Window", CreateTestContent());
         private void Icon_About_Click(object sender, RoutedEventArgs e) => OpenMockWindow("About GARDIAN OS", CreateAboutContent());
 
@@ -133,7 +105,6 @@ namespace Gardian.Views
             var skypeWindow = new MockWindow { Title = "Skype™", Width = 600, Height = 450 };
             var skypeApp = new SkypeApp();
 
-            // ✨ БЕРЕМ ИМЯ ИЗ МЕНЕДЖЕРА СЕССИИ, а не хардкодим
             string currentUser = UserSessionManager.CurrentUser?.Username ?? "unknown";
             var viewModel = new SkypeViewModel(currentUser);
             skypeApp.Initialize(viewModel);
@@ -217,20 +188,19 @@ namespace Gardian.Views
             return stack;
         }
 
-        private void Btn_Start_Click(object sender, RoutedEventArgs e) => MessageBox.Show(this, "Start Menu (Coming Soon)", "GARDIAN", MessageBoxButton.OK, MessageBoxImage.Information);
+        private void Btn_Start_Click(object sender, RoutedEventArgs e) =>
+            MessageBox.Show(this, "Start Menu (Coming Soon)", "GARDIAN", MessageBoxButton.OK, MessageBoxImage.Information);
+
         private void Btn_Settings_Click(object sender, RoutedEventArgs e)
         {
             var settings = new SettingsWindow { Owner = this };
             settings.ShowDialog();
         }
 
-        // === ОЧИСТКА ПАМЯТИ (ОДИН РАЗ) ===
         protected override void OnClosed(EventArgs e)
         {
             SettingsManager.SettingsChanged -= OnSettingsChanged;
             base.OnClosed(e);
         }
-
-
     }
 }

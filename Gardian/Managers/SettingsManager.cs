@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows;
 using System.Windows.Media;
 
 namespace Gardian.Managers
@@ -9,7 +10,6 @@ namespace Gardian.Managers
         private static void OnSettingsChanged() => SettingsChanged?.Invoke();
 
         // === 1. ЛОГИЧЕСКИЕ ПЕРЕКЛЮЧАТЕЛИ ===
-        
         public static bool EnableVignette { get; set; } = true;
         public static bool EnableNoise { get; set; } = true;
         public static bool EnableBlur { get; set; } = false;
@@ -30,12 +30,60 @@ namespace Gardian.Managers
 
         public static double DistortionAmount { get; set; } = 0.06;
         public static double ChromaticSpread { get; set; } = 0.8;
-        
         public static double NoiseAmount { get; set; } = 0.2;
 
         // === 3. ТЕМЫ ===
         public enum ThemeType { Green, Cyberpunk, White, Win98 }
-        public static ThemeType CurrentTheme { get; set; } = ThemeType.Green;
+
+        private static ThemeType _currentTheme = ThemeType.Green;
+        public static ThemeType CurrentTheme
+        {
+            get => _currentTheme;
+            set
+            {
+                if (_currentTheme != value)
+                {
+                    _currentTheme = value;
+                    UpdateGlowColor();      // ✨ Обновляем цвет свечения при смене темы
+                    OnSettingsChanged();    // Уведомляем остальные части приложения
+                }
+            }
+        }
+
+        // ✨ Статический конструктор: вызывается один раз при первом обращении к классу
+        static SettingsManager()
+        {
+            UpdateGlowColor();
+        }
+
+        // ✨ Метод обновления цвета свечения в глобальных ресурсах приложения
+        private static void UpdateGlowColor()
+        {
+            Color glowColor;
+
+            switch (_currentTheme)
+            {
+                case ThemeType.Cyberpunk:
+                    glowColor = (Color)ColorConverter.ConvertFromString("#FF00FF");
+                    break;
+                case ThemeType.White:
+                    glowColor = (Color)ColorConverter.ConvertFromString("#FFFFFF");
+                    break;
+                case ThemeType.Win98:
+                    glowColor = Colors.Transparent; // В Win98 свечение отключено
+                    break;
+                case ThemeType.Green:
+                default:
+                    glowColor = (Color)ColorConverter.ConvertFromString("#00FF41");
+                    break;
+            }
+
+            // Безопасно обновляем ресурс, если приложение уже запущено
+            if (Application.Current != null)
+            {
+                Application.Current.Resources["GlowColor"] = glowColor;
+            }
+        }
 
         public static Color GetThemeColor()
         {
@@ -100,7 +148,6 @@ namespace Gardian.Managers
             return CurrentTheme == ThemeType.Win98 || CurrentTheme == ThemeType.Cyberpunk;
         }
 
-        // Этот метод вызывается, когда пользователь нажимает OK в настройках или двигает ползунок
         public static void Apply()
         {
             OnSettingsChanged();
