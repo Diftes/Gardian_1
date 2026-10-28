@@ -11,7 +11,7 @@
                 <effects:CrtShaderEffect x:Name="PreviewEffect"
                                          Time="0" Scale="2" Resolution="320,240"
                                          EnableDistortion="1" EnableNoise="1" EnableChromatic="1"
-                                         EnableBlur="1" EnableScanline="1" GlowStrength="0.4"/>
+                                         EnableBlur="1" GlowStrength="0.4"/>
             </Grid.Effect>
 
             <!-- РЕЖИМ 1: TV Test Pattern (Цветные полосы) -->

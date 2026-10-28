@@ -38,7 +38,6 @@ namespace Gardian.Controls
         {
             if (PreviewEffect == null) return;
 
-            PreviewEffect.EnableScanline = SettingsManager.EnableScanlines ? 1.0 : 0.0;
             PreviewEffect.EnableDistortion = SettingsManager.EnableVignette ? 1.0 : 0.0;
             PreviewEffect.EnableChromatic = SettingsManager.EnableChromatic ? 1.0 : 0.0;
             PreviewEffect.EnableBlur = SettingsManager.EnableBlur ? 1.0 : 0.0;
@@ -47,7 +46,6 @@ namespace Gardian.Controls
 
             PreviewEffect.DistortionAmount = SettingsManager.DistortionAmount;
             PreviewEffect.ChromaticSpread = SettingsManager.ChromaticSpread;
-            PreviewEffect.ScanlineFactor = SettingsManager.ScanlineFactor;
             PreviewEffect.NoiseAmount = SettingsManager.NoiseAmount;
             PreviewEffect.LineSpeed = SettingsManager.LineSpeed;
             PreviewEffect.LineWidth = SettingsManager.LineWidth;

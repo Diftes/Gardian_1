@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
 using Gardian.Apps;
@@ -16,6 +17,7 @@ namespace Gardian.Views
     {
         private readonly DispatcherTimer _clockTimer;
         private readonly List<MockWindow> _openWindows = new();
+        private HotkeysNoteWindow _hotkeysNote;
 
         public OsDesktopWindow()
         {
@@ -45,17 +47,13 @@ namespace Gardian.Views
         {
             if (CrtEffect == null) return;
 
-            CrtEffect.EnableScanline = SettingsManager.EnableScanlines ? 1.0 : 0.0;
             CrtEffect.EnableDistortion = SettingsManager.EnableVignette ? 1.0 : 0.0;
             CrtEffect.EnableChromatic = SettingsManager.EnableChromatic ? 1.0 : 0.0;
             CrtEffect.EnableBlur = SettingsManager.EnableBlur ? 1.0 : 0.0;
             CrtEffect.EnableNoise = SettingsManager.EnableNoise ? 1.0 : 0.0;
             CrtEffect.GlowStrength = SettingsManager.EnableBlur ? 0.4 : 0.0;
-
             CrtEffect.DistortionAmount = SettingsManager.DistortionAmount;
             CrtEffect.ChromaticSpread = SettingsManager.ChromaticSpread;
-            CrtEffect.ScanlineFactor = SettingsManager.ScanlineFactor;
-            CrtEffect.ScanlineFrequency = SettingsManager.ScanlineFrequency;
             CrtEffect.PhosphorGlow = SettingsManager.PhosphorGlow;
             CrtEffect.BrightnessBoost = SettingsManager.BrightnessBoost;
             CrtEffect.NoiseAmount = SettingsManager.NoiseAmount;
@@ -89,10 +87,34 @@ namespace Gardian.Views
 
         private void Window_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
+            // F12 — открыть/закрыть записку с хоткеями
+            if (e.Key == Key.F12)
+            {
+                ToggleHotkeysNote();
+                e.Handled = true;
+                return;
+            }
+
+            // Остальные хоткеи (F3-F9) обрабатывает KeyboardHandler
             if (Gardian.Utils.KeyboardHandler.HandleHotkeys(e.Key))
             {
                 e.Handled = true;
                 SettingsManager.Apply();
+            }
+        }
+        private void ToggleHotkeysNote()
+        {
+            if (_hotkeysNote == null || !_hotkeysNote.IsVisible)
+            {
+                _hotkeysNote = new HotkeysNoteWindow();
+                _hotkeysNote.Left = 20;
+                _hotkeysNote.Top = 20;
+                _hotkeysNote.Show();
+            }
+            else
+            {
+                _hotkeysNote.Close();
+                _hotkeysNote = null;
             }
         }
 
@@ -208,5 +230,7 @@ namespace Gardian.Views
             SettingsManager.SettingsChanged -= OnSettingsChanged;
             base.OnClosed(e);
         }
+
+
     }
 }

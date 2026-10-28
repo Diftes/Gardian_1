@@ -19,8 +19,7 @@
                                      EnableDistortion="1"
                                      EnableNoise="1"
                                      EnableChromatic="1"
-                                     EnableBlur="0"
-                                     EnableScanline="1"/>
+                                     EnableBlur="0"/>
         </Grid.Effect>
 
         <!-- Основной контент терминала -->

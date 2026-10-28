@@ -24,8 +24,7 @@ namespace Gardian.Views
 
         private void UpdateCheckBoxesFromSettings()
         {
-            if (ChkScanlines != null) ChkScanlines.IsChecked = SettingsManager.EnableScanlines;
-            if (ChkScanlineDark != null) ChkScanlineDark.IsChecked = SettingsManager.ScanlineFactor > 0;
+
             if (ChkDistortion != null) ChkDistortion.IsChecked = SettingsManager.EnableVignette;
             if (ChkPhosphorGlow != null) ChkPhosphorGlow.IsChecked = SettingsManager.PhosphorGlow > 0;
             if (ChkNoise != null) ChkNoise.IsChecked = SettingsManager.EnableNoise;
@@ -39,8 +38,6 @@ namespace Gardian.Views
         {
             if (SldDistortion != null) SldDistortion.Value = SettingsManager.DistortionAmount;
             if (SldChromatic != null) SldChromatic.Value = SettingsManager.ChromaticSpread;
-            if (SldScanline != null) SldScanline.Value = SettingsManager.ScanlineFactor;
-            if (SldScanlineFreq != null) SldScanlineFreq.Value = SettingsManager.ScanlineFrequency;
             if (SldPhosphorGlow != null) SldPhosphorGlow.Value = SettingsManager.PhosphorGlow;
             if (SldBrightness != null) SldBrightness.Value = SettingsManager.BrightnessBoost;
             if (SldNoise != null) SldNoise.Value = SettingsManager.NoiseAmount;
@@ -50,8 +47,6 @@ namespace Gardian.Views
 
         private void ToggleSetting(object sender, RoutedEventArgs e)
         {
-            if (ChkScanlines != null) SettingsManager.EnableScanlines = ChkScanlines.IsChecked == true;
-            if (ChkScanlineDark != null) SettingsManager.ScanlineFactor = ChkScanlineDark.IsChecked == true ? SettingsManager.LastScanlineFactor : 0;
             if (ChkDistortion != null) SettingsManager.EnableVignette = ChkDistortion.IsChecked == true;
             if (ChkPhosphorGlow != null) SettingsManager.PhosphorGlow = ChkPhosphorGlow.IsChecked == true ? SettingsManager.LastPhosphorGlow : 0;
             if (ChkNoise != null) SettingsManager.EnableNoise = ChkNoise.IsChecked == true;
@@ -71,9 +66,6 @@ namespace Gardian.Views
             if (SldChromatic != null) SettingsManager.ChromaticSpread = SldChromatic.Value;
 
             // ВАЖНО: Обновляем и основное, и Last значение, чтобы toggle запоминал твой выбор!
-            if (SldScanline != null) { SettingsManager.ScanlineFactor = SldScanline.Value; if (SldScanline.Value > 0) SettingsManager.LastScanlineFactor = SldScanline.Value; }
-            if (SldScanlineFreq != null) SettingsManager.ScanlineFrequency = SldScanlineFreq.Value;
-
             if (SldPhosphorGlow != null) { SettingsManager.PhosphorGlow = SldPhosphorGlow.Value; if (SldPhosphorGlow.Value > 0) SettingsManager.LastPhosphorGlow = SldPhosphorGlow.Value; }
             if (SldBrightness != null) { SettingsManager.BrightnessBoost = SldBrightness.Value; if (SldBrightness.Value > 0) SettingsManager.LastBrightnessBoost = SldBrightness.Value; }
 
@@ -106,17 +98,13 @@ namespace Gardian.Views
             {
                 if (window is DosTerminalWindow terminal && terminal.CrtEffect != null)
                 {
-                    terminal.CrtEffect.EnableScanline = SettingsManager.EnableScanlines ? 1.0 : 0.0;
                     terminal.CrtEffect.EnableDistortion = SettingsManager.EnableVignette ? 1.0 : 0.0;
                     terminal.CrtEffect.EnableChromatic = SettingsManager.EnableChromatic ? 1.0 : 0.0;
                     terminal.CrtEffect.EnableBlur = SettingsManager.EnableBlur ? 1.0 : 0.0;
                     terminal.CrtEffect.EnableNoise = SettingsManager.EnableNoise ? 1.0 : 0.0;
                     terminal.CrtEffect.GlowStrength = SettingsManager.EnableBlur ? 0.4 : 0.0;
-
                     terminal.CrtEffect.DistortionAmount = SettingsManager.DistortionAmount;
                     terminal.CrtEffect.ChromaticSpread = SettingsManager.ChromaticSpread;
-                    terminal.CrtEffect.ScanlineFactor = SettingsManager.ScanlineFactor;
-                    terminal.CrtEffect.ScanlineFrequency = SettingsManager.ScanlineFrequency;
                     terminal.CrtEffect.PhosphorGlow = SettingsManager.PhosphorGlow;
                     terminal.CrtEffect.BrightnessBoost = SettingsManager.BrightnessBoost;
                     terminal.CrtEffect.NoiseAmount = SettingsManager.NoiseAmount;
@@ -187,8 +175,6 @@ namespace Gardian.Views
         {
             SettingsManager.DistortionAmount = distortion;
             SettingsManager.ChromaticSpread = chromatic;
-            SettingsManager.ScanlineFactor = scanlineFactor;
-            SettingsManager.ScanlineFrequency = scanlineFreq;
             SettingsManager.PhosphorGlow = phosphorGlow;
             SettingsManager.BrightnessBoost = brightness;
             SettingsManager.NoiseAmount = noise;
@@ -196,7 +182,6 @@ namespace Gardian.Views
             SettingsManager.LineWidth = lineWidth;
 
             // Синхронизируем Last значения с пресетом
-            SettingsManager.LastScanlineFactor = scanlineFactor > 0 ? scanlineFactor : 0.7;
             SettingsManager.LastPhosphorGlow = phosphorGlow > 0 ? phosphorGlow : 4.0;
             SettingsManager.LastBrightnessBoost = brightness > 0 ? brightness : 0.15;
             SettingsManager.LastLineSpeed = lineSpeed > 0 ? lineSpeed : 0.3;

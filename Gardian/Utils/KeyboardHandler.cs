@@ -9,7 +9,7 @@ namespace Gardian.Utils
         {
             switch (key)
             {
-                case Key.F1:
+                /*  case Key.F1:
                     SettingsManager.EnableScanlines = !SettingsManager.EnableScanlines;
                     return true;
 
@@ -23,7 +23,7 @@ namespace Gardian.Utils
                     {
                         SettingsManager.ScanlineFactor = SettingsManager.LastScanlineFactor > 0 ? SettingsManager.LastScanlineFactor : 0.7;
                     }
-                    return true;
+                    return true;   */
 
                 case Key.F3:
                     SettingsManager.EnableVignette = !SettingsManager.EnableVignette;
@@ -84,6 +84,10 @@ namespace Gardian.Utils
                         SettingsManager.LineWidth = SettingsManager.LastLineWidth > 0 ? SettingsManager.LastLineWidth : 20.0;
                     }
                     return true;
+                case Key.F1:
+                    // Открываем записку с хоткеями
+                    // Возвращаем false, потому что само окно открывается через событие в главном окне
+                    return false;
             }
             return false;
         }

@@ -9,16 +9,13 @@ namespace Gardian.Managers
         private static void OnSettingsChanged() => SettingsChanged?.Invoke();
 
         // === 1. ЛОГИЧЕСКИЕ ПЕРЕКЛЮЧАТЕЛИ ===
-        public static bool EnableScanlines { get; set; } = true;
+        
         public static bool EnableVignette { get; set; } = true;
         public static bool EnableNoise { get; set; } = true;
         public static bool EnableBlur { get; set; } = false;
         public static bool EnableChromatic { get; set; } = true;
 
         // === 2. ЧИСЛОВЫЕ НАСТРОЙКИ И "ПОСЛЕДНИЕ" ЗНАЧЕНИЯ ===
-        public static double ScanlineFactor { get; set; } = 0.7;
-        public static double LastScanlineFactor { get; set; } = 0.7;
-
         public static double PhosphorGlow { get; set; } = 4.0;
         public static double LastPhosphorGlow { get; set; } = 4.0;
 
@@ -33,7 +30,7 @@ namespace Gardian.Managers
 
         public static double DistortionAmount { get; set; } = 0.06;
         public static double ChromaticSpread { get; set; } = 0.8;
-        public static double ScanlineFrequency { get; set; } = 4.0;
+        
         public static double NoiseAmount { get; set; } = 0.2;
 
         // === 3. ТЕМЫ ===

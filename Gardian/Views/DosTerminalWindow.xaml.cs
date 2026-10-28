@@ -244,7 +244,7 @@ namespace Gardian.Views
             if (CrtEffect == null) return;
 
             // Флаги вкл/выкл
-            CrtEffect.EnableScanline = SettingsManager.EnableScanlines ? 1.0 : 0.0;
+
             CrtEffect.EnableDistortion = SettingsManager.EnableVignette ? 1.0 : 0.0;
             CrtEffect.EnableChromatic = SettingsManager.EnableChromatic ? 1.0 : 0.0;
             CrtEffect.EnableBlur = SettingsManager.EnableBlur ? 1.0 : 0.0;
@@ -254,12 +254,8 @@ namespace Gardian.Views
             // Числовые значения
             CrtEffect.DistortionAmount = SettingsManager.DistortionAmount;
             CrtEffect.ChromaticSpread = SettingsManager.ChromaticSpread;
-            CrtEffect.ScanlineFactor = SettingsManager.ScanlineFactor;
-
-            CrtEffect.ScanlineFrequency = SettingsManager.ScanlineFrequency; // ← ДОБАВЛЕНО
             CrtEffect.PhosphorGlow = SettingsManager.PhosphorGlow;          // ← ДОБАВЛЕНО
             CrtEffect.BrightnessBoost = SettingsManager.BrightnessBoost;    // ← ДОБАВЛЕНО
-
             CrtEffect.NoiseAmount = SettingsManager.NoiseAmount;
             CrtEffect.LineSpeed = SettingsManager.LineSpeed;
             CrtEffect.LineWidth = SettingsManager.LineWidth;

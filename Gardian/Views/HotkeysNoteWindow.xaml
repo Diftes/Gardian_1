@@ -1,0 +1,59 @@
+﻿<Window x:Class="Gardian.Views.HotkeysNoteWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="HOTKEYS" 
+        Width="220" Height="320"
+        WindowStyle="None" 
+        AllowsTransparency="True" 
+        Background="Transparent"
+        Topmost="True"
+        ResizeMode="NoResize"
+        ShowInTaskbar="False"
+        TextOptions.TextFormattingMode="Display"
+        TextOptions.TextRenderingMode="Aliased"
+        FontFamily="Tahoma, 'MS Sans Serif', sans-serif"
+        FontSize="10">
+
+    <!-- Внешняя "тень" записки -->
+    <Border Margin="4" CornerRadius="2">
+        <Border.Effect>
+            <DropShadowEffect BlurRadius="8" ShadowDepth="3" Opacity="0.5" Color="Black"/>
+        </Border.Effect>
+
+        <!-- Сама записка -->
+        <Border x:Name="NoteBorder" 
+                Background="#FFFFCC" 
+                BorderBrush="#D4C878" 
+                BorderThickness="1"
+                CornerRadius="2"
+                MouseLeftButtonDown="NoteBorder_MouseLeftButtonDown">
+
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="22"/>
+                    <!-- Заголовок -->
+                    <RowDefinition Height="*"/>
+                    <!-- Контент -->
+                </Grid.RowDefinitions>
+
+                <!-- Заголовок (перетаскиваемая зона) -->
+                <Border Grid.Row="0" Background="#E8D878" CornerRadius="2,2,0,0" Padding="4,2">
+                    <DockPanel>
+                        <Button Content="✕" Width="16" Height="16" DockPanel.Dock="Right" 
+                                FontSize="9" Padding="0" Margin="2,0,0,0"
+                                Click="BtnClose_Click"/>
+                        <TextBlock Text="📌 HOTKEYS" FontWeight="Bold" VerticalAlignment="Center"
+                                   Foreground="#333333"/>
+                    </DockPanel>
+                </Border>
+
+                <!-- Список хоткеев -->
+                <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Padding="6,4">
+                    <StackPanel x:Name="HotkeysList" Orientation="Vertical">
+                        <!-- Сюда динамически добавляются строки -->
+                    </StackPanel>
+                </ScrollViewer>
+            </Grid>
+        </Border>
+    </Border>
+</Window>
