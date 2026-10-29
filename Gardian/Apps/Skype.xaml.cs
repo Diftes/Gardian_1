@@ -14,13 +14,13 @@ namespace Gardian.Apps
         private string _lastMessage = "";
         private bool _isInCall = false;
         private SkypeViewModel _viewModel; // ← ДОБАВЛЕНО
-
+        
         public SkypeApp()
         {
             InitializeComponent();
             _botTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1.5) };
             _botTimer.Tick += BotTimer_Tick;
-
+            
             AppendToChat("System", "Echo-bot for sound testing is connected.");
         }
 
@@ -29,6 +29,7 @@ namespace Gardian.Apps
         {
             _viewModel = viewModel;
             DataContext = viewModel; // ← ПРИВЯЗЫВАЕМ DATACONTEXT ЗДЕСЬ
+            
         }
 
         private void Send_Click(object sender, RoutedEventArgs e) => SendMessage();
@@ -143,5 +144,7 @@ namespace Gardian.Apps
             VN_Choices.Children.Clear();
             AddVNChoice("End Call", (s, args) => EndCall_Click(s, args));
         }
+
+        
     }
 }

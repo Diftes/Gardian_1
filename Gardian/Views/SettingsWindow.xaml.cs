@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
 using Gardian.Managers;
 using Gardian.Utils;
@@ -13,13 +14,22 @@ namespace Gardian.Views
         {
             InitializeComponent();
             this.Loaded += SettingsWindow_Loaded;
+            this.Closed += SettingsWindow_Closed;
+            
         }
 
         private void SettingsWindow_Loaded(object sender, RoutedEventArgs e)
         {
+            this.Cursor = Cursors.Arrow;
+            Mouse.OverrideCursor = Cursors.Arrow;
             UpdateCheckBoxesFromSettings();
             UpdateSlidersFromSettings();
             UpdateLabels();
+        }
+
+        private void SettingsWindow_Closed(object sender, System.EventArgs e)
+        {
+            Mouse.OverrideCursor = null;
         }
 
         private void UpdateCheckBoxesFromSettings()

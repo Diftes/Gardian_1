@@ -23,7 +23,7 @@
                 BorderThickness="1">
             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                 <Ellipse Width="12" Height="12" Fill="#32CD32" Stroke="Green" StrokeThickness="1" Margin="0,0,8,0"/>
-                <TextBlock Text="retro_user (Online)" FontWeight="Bold" VerticalAlignment="Center"/>
+                <TextBlock Text="/\/\/\/\/\" FontWeight="Bold" VerticalAlignment="Center"/>
             </StackPanel>
         </Border>
 

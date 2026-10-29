@@ -31,13 +31,25 @@ namespace Gardian.Data
                     AllowedForUsers = new List<string> { "admin_user" }
                 },
                 new Contact {
-                    Name = "Graphite Ruby (Second Vice Director)", Status = "Online",
+                    Name = "Graphite Ruby (Second Vice Director)", Status = "DND",
                     AvatarResourceName = "avatar_ruby.png",
                     IsCallEnabled = true, HasVNDialogue = true,
                     AllowedForUsers = new List<string> { "admin_user" }
                 },
                 new Contact {
-                    Name = "Light Wine", Status = "Online",
+                    Name = "Light Wine", Status = "Away",
+                    AvatarResourceName = "avatar_admin.png",
+                    IsCallEnabled = true, HasVNDialogue = true,
+                    AllowedForUsers = new List<string> { "admin_user" }
+                },
+                new Contact {
+                    Name = "Gardy", Status = "Offline",
+                    AvatarResourceName = "avatar_admin.png",
+                    IsCallEnabled = true, HasVNDialogue = true,
+                    AllowedForUsers = new List<string> { "admin_user" }
+                },
+                new Contact {
+                    Name = "Coldwire", Status = "Offline",
                     AvatarResourceName = "avatar_admin.png",
                     IsCallEnabled = true, HasVNDialogue = true,
                     AllowedForUsers = new List<string> { "admin_user" }

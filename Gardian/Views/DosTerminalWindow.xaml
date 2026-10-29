@@ -36,7 +36,7 @@
                              PreviewKeyDown="CmdInput_PreviewKeyDown"/>
                 </StackPanel>
             </Border>
-            <ScrollViewer x:Name="LogScroll" VerticalScrollBarVisibility="Auto" Focusable="False">
+            <ScrollViewer x:Name="LogScroll" VerticalScrollBarVisibility="Hidden" Focusable="False">
                 <TextBlock x:Name="OutputLog" FontFamily="Consolas" FontSize="14" 
                            Padding="8" TextWrapping="Wrap" Margin="0,0,0,4" Focusable="False" Style="{StaticResource GlowingText}"/>
             </ScrollViewer>

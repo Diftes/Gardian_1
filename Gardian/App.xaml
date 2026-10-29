@@ -5,18 +5,19 @@
     <Application.Resources>
 
         <!-- ЦВЕТА СВЕЧЕНИЯ ДЛЯ РАЗНЫХ ТЕМ -->
-        <Color x:Key="GlowColor">#00FF41</Color>
+        <Color x:Key="GlowColor">#FFFFFF</Color>
         <!-- По умолчанию Green -->
 
         <Style x:Key="GlowingText" TargetType="TextBlock">
             <Setter Property="Effect">
                 <Setter.Value>
                     <DropShadowEffect 
-                        Color="{DynamicResource GlowColor}" 
-                        BlurRadius="4" 
-                        ShadowDepth="0" 
-                        Opacity="0.8" 
-                        RenderingBias="Performance"/>
+                        Color="{DynamicResource GlowColor}"
+                        
+                        BlurRadius="2.5" 
+                        ShadowDepth="0.5" 
+                        Opacity="0.9" 
+                        RenderingBias="Quality"/>
                 </Setter.Value>
             </Setter>
         </Style>
